@@ -31,7 +31,6 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.OverwriteBookmarkException;
 
 import static org.junit.Assert.fail;
 

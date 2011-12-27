@@ -26,7 +26,6 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import org.jboss.forge.shell.Shell;
-import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.DefaultCommand;
@@ -87,9 +86,13 @@ public class Go implements Plugin
          int promptChoice = prompt.promptChoice("You have 2 paths with the same mark\nGlobal path: " + pathGlobal
                   + "\nProject path " + pathProject, Arrays.asList("global", "project"));
          if (promptChoice == 0)
+         {
             path = pathGlobal;
+         }
          else
+         {
             path = pathProject;
+         }
       }
       else if (pathProject != null)
       {
