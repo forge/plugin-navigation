@@ -21,13 +21,31 @@
  */
 package org.kumakros.forge.plugin.navigation;
 
+import javax.inject.Inject;
+
+import org.apache.commons.lang.RandomStringUtils;
 import org.jboss.arquillian.api.Deployment;
+import org.jboss.forge.shell.Shell;
 import org.jboss.forge.test.AbstractShellTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
+import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
+import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
+import org.kumakros.forge.plugin.navigation.bookmark.exception.OverwriteBookmarkException;
+
+import static org.junit.Assert.fail;
 
 public class GoTest extends AbstractShellTest
 {
+   @Inject
+   Shell shell;
+
+   @Inject
+   GlobalBookmarkCache globalBookmarkCache;
+
+   @Inject
+   ProjectBookmarkCache projectBookmarkCache;
+
    @Deployment
    public static JavaArchive getDeployment()
    {
@@ -36,21 +54,79 @@ public class GoTest extends AbstractShellTest
    }
 
    @Test
-   public void testDefaultCommand() throws Exception
+   public void globalGoTest() throws Exception
    {
-      getShell().execute("go");
+      String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
+      String path = shell.getCurrentDirectory().getFullyQualifiedName();
+      globalBookmarkCache.addBookmark(marktest, path);
+
+      shell.execute("cd ..");
+
+      String path2 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert !path.contentEquals(path2);
+
+      shell.execute("go " + marktest);
+
+      String path3 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert path.contains(path3);
+
+      globalBookmarkCache.delBookmark(marktest);
+
    }
 
    @Test
-   public void testCommand() throws Exception
+   public void projectGoTest() throws Exception
    {
-      getShell().execute("go command");
+      String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
+      String path = shell.getCurrentDirectory().getFullyQualifiedName();
+      projectBookmarkCache.addBookmark(marktest, path);
+
+      shell.execute("cd ..");
+
+      String path2 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert !path.contentEquals(path2);
+
+      shell.execute("go " + marktest);
+
+      String path3 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert path2.contains(path3);
+
+      shell.execute("cd " + path);
+
+      projectBookmarkCache.delBookmark(marktest);
    }
 
    @Test
-   public void testPrompt() throws Exception
+   public void globalGoNotFoundTest() throws Exception
    {
-      queueInputLines("y");
-      getShell().execute("go prompt foo bar");
+      String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
+      String path = shell.getCurrentDirectory().getFullyQualifiedName();
+      globalBookmarkCache.addBookmark(marktest,
+               "/" + RandomStringUtils.randomAlphanumeric(8) + "/" + RandomStringUtils.randomAlphanumeric(8));
+
+      shell.execute("cd ..");
+
+      String path2 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert !path.contentEquals(path2);
+
+      try
+      {
+         shell.execute("go " + marktest);
+         fail();
+      }
+      catch (Exception e)
+      {
+      }
+
+      String path3 = shell.getCurrentDirectory().getFullyQualifiedName();
+
+      assert path2.contains(path3);
+
    }
+
 }

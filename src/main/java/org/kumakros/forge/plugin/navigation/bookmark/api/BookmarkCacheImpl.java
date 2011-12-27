@@ -1,3 +1,24 @@
+/*
+ * JBoss, Home of Professional Open Source
+ * Copyright 2011, Red Hat, Inc., and individual contributors
+ * by the @authors tag. See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.kumakros.forge.plugin.navigation.bookmark.api;
 
 import java.util.ArrayList;
@@ -22,6 +43,7 @@ public class BookmarkCacheImpl implements BookmarkCache
       this.cache = new HashMap<String, String>();
    }
 
+   @Override
    public void addBookmark(String name, String path) throws OverwriteBookmarkException
    {
       checkInitializedCache();
@@ -36,6 +58,7 @@ public class BookmarkCacheImpl implements BookmarkCache
       }
    }
 
+   @Override
    public void overrideBookmark(String name, String path)
    {
       checkInitializedCache();
@@ -57,6 +80,7 @@ public class BookmarkCacheImpl implements BookmarkCache
 
    }
 
+   @Override
    public void delBookmark(String name) throws NonExistsBookmarkException
    {
       checkInitializedCache();
@@ -72,6 +96,7 @@ public class BookmarkCacheImpl implements BookmarkCache
 
    }
 
+   @Override
    public String getBookmark(String name) throws NonExistsBookmarkException
    {
       if (cache.containsKey(name))
@@ -84,6 +109,7 @@ public class BookmarkCacheImpl implements BookmarkCache
       }
    }
 
+   @Override
    public List<Bookmark> listBookmarks()
    {
       List<Bookmark> bookmarks = new ArrayList<Bookmark>();
@@ -120,7 +146,7 @@ public class BookmarkCacheImpl implements BookmarkCache
 
    /**
     * Check if Configuration is set
-    * 
+    *
     * @throws IllegalStateException when forgeConfig isn't set
     */
    public void checkInitializedCache()
@@ -131,6 +157,7 @@ public class BookmarkCacheImpl implements BookmarkCache
       }
    }
 
+   @Override
    public void cleanAll()
    {
       checkInitializedCache();
@@ -147,4 +174,19 @@ public class BookmarkCacheImpl implements BookmarkCache
       return cache;
    }
 
+   @Override
+   public List<Bookmark> preffixSearch(String preffix)
+   {
+      Set<String> keySet = cache.keySet();
+      List<Bookmark> bookmarks = new ArrayList<Bookmark>();
+      for (String key : keySet)
+      {
+         if (preffix == null || preffix.contentEquals("") || key.startsWith(preffix))
+         {
+            String path = cache.get(key);
+            bookmarks.add(new Bookmark(key, path));
+         }
+      }
+      return bookmarks;
+   }
 }

@@ -25,14 +25,16 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
-import org.jboss.forge.shell.plugins.Command;
 import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
-import org.jboss.forge.shell.plugins.PipeIn;
-import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
+import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
+import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
+import org.kumakros.forge.plugin.navigation.bookmark.exception.NonExistsBookmarkException;
 
 /**
  *
@@ -41,37 +43,66 @@ import org.jboss.forge.shell.plugins.Plugin;
 public class Go implements Plugin
 {
    @Inject
+   private Shell shell;
+
+   @Inject
    private ShellPrompt prompt;
 
+   @Inject
+   GlobalBookmarkCache globalBookmarkCache;
+
+   @Inject
+   ProjectBookmarkCache projectBookmarkCache;
+
    @DefaultCommand
-   public void defaultCommand(@PipeIn String in, PipeOut out)
+   public void defaultCommand(
+            @Option(required = true, completer = BookmarkAutocompleter.class, description = "Name of bookmark for go") final String mark)
+            throws Exception
    {
-      out.println("Executed default command.");
-   }
+      String pathProject = null;
+      String pathGlobal = null;
+      String path = null;
+      if (shell.getCurrentProject() != null)
+      {
+         try
+         {
+            pathProject = projectBookmarkCache.getBookmark(mark);
+         }
+         catch (NonExistsBookmarkException e)
+         {
+            // No pasa nada
+         }
+      }
+      try
+      {
+         pathGlobal = globalBookmarkCache.getBookmark(mark);
+      }
+      catch (NonExistsBookmarkException e1)
+      {
+         // No pasa nada
+      }
+      if (pathProject != null && pathGlobal != null)
+      {
+         // To choose between project and global option
+         int promptChoice = prompt.promptChoice("You have 2 paths with the same mark\nGlobal path: " + pathGlobal
+                  + "\nProject path " + pathProject, Arrays.asList("global", "project"));
+         if (promptChoice == 0)
+            path = pathGlobal;
+         else
+            path = pathProject;
+      }
+      else if (pathProject != null)
+      {
+         path = pathProject;
+      }
+      else if (pathGlobal != null)
+      {
+         path = pathGlobal;
+      }
 
-   @Command
-   public void command(@PipeIn String in, PipeOut out, @Option String... args)
-   {
-      if (args == null)
+      if (path != null)
       {
-         out.println("Executed named command without args.");
-      }
-      else
-      {
-         out.println("Executed named command with args: " + Arrays.asList(args));
-      }
-   }
-
-   @Command
-   public void prompt(@PipeIn String in, PipeOut out)
-   {
-      if (prompt.promptBoolean("Do you like writing Forge plugins?"))
-      {
-         out.println("I am happy.");
-      }
-      else
-      {
-         out.println("I am sad.");
+         shell.execute("cd " + path);
       }
    }
 }

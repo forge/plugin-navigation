@@ -54,7 +54,7 @@ public class GlobalBookmarkCacheTest extends AbstractShellTest
    }
 
    @Test
-   public void cleanAllAndRestore()
+   public void cleanAllAndRestoreTest()
    {
       Set<Entry<String, String>> entrySet = globalBookmarkCache.getCache().entrySet();
       globalBookmarkCache.cleanAll();
@@ -65,7 +65,7 @@ public class GlobalBookmarkCacheTest extends AbstractShellTest
    }
 
    @Test
-   public void addAndRemove() throws OverwriteBookmarkException, NonExistsBookmarkException
+   public void addAndRemoveTest() throws OverwriteBookmarkException, NonExistsBookmarkException
    {
       String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
       DirectoryResource currentDirectory = shell.getCurrentDirectory();
@@ -75,7 +75,7 @@ public class GlobalBookmarkCacheTest extends AbstractShellTest
    }
 
    @Test
-   public void addAndOverwrite() throws Exception
+   public void addAndOverwriteTest() throws Exception
    {
       String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
       DirectoryResource currentDirectory = shell.getCurrentDirectory();
@@ -96,7 +96,7 @@ public class GlobalBookmarkCacheTest extends AbstractShellTest
    }
 
    @Test
-   public void listAll() throws Exception
+   public void listAllTest() throws Exception
    {
       String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
       DirectoryResource currentDirectory = shell.getCurrentDirectory();
@@ -113,4 +113,24 @@ public class GlobalBookmarkCacheTest extends AbstractShellTest
 
       globalBookmarkCache.cleanAll();
    }
+
+   @Test
+   public void preffixSearchTest() throws Exception
+   {
+      String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
+      DirectoryResource currentDirectory = shell.getCurrentDirectory();
+
+      List<Bookmark> list1 = globalBookmarkCache.preffixSearch("forge");
+
+      globalBookmarkCache.addBookmark(marktest, currentDirectory.getFullyQualifiedName());
+
+      List<Bookmark> list2 = globalBookmarkCache.preffixSearch("forge");
+
+      globalBookmarkCache.delBookmark(marktest);
+
+      assert list1.size() + 1 == list2.size();
+
+      globalBookmarkCache.cleanAll();
+   }
+
 }

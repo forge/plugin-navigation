@@ -21,7 +21,6 @@
  */
 package org.kumakros.forge.plugin.navigation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +31,7 @@ import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.ShellPrompt;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;
+import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.Plugin;
 import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
@@ -58,6 +58,14 @@ public class Mark implements Plugin
 
    @Inject
    ProjectBookmarkCache projectBookmarkCache;
+
+   @DefaultCommand()
+   public void defaultCommand(
+            @Option(required = true, description = "Bookmark name for this resource") String mark,
+            @Option(name = "global", description = "Add to global bookmarks list?", flagOnly = true, defaultValue = "false") boolean global)
+   {
+      add(mark, global);
+   }
 
    @Command("add")
    public void add(

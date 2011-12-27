@@ -53,12 +53,13 @@ public class MarkTest extends AbstractShellTest
    @Test
    public void testAddGlobalMark() throws Exception
    {
-      getShell().execute("mark add forge --global");
-      globalBookmarkCache.getBookmark("forge");
+      String marktest = "forge" + RandomStringUtils.randomAlphanumeric(8);
+      getShell().execute("mark add " + marktest + " --global");
+      globalBookmarkCache.getBookmark(marktest);
 
       try
       {
-         projectBookmarkCache.getBookmark("forge");
+         projectBookmarkCache.getBookmark(marktest);
          fail();
       }
       catch (NonExistsBookmarkException e)
@@ -66,7 +67,7 @@ public class MarkTest extends AbstractShellTest
 
       }
 
-      globalBookmarkCache.delBookmark("forge");
+      globalBookmarkCache.delBookmark(marktest);
    }
 
    @Test
