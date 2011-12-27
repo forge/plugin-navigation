@@ -128,8 +128,9 @@ public class BookmarkCacheImpl implements BookmarkCache
       while (keys.hasNext())
       {
          String key = String.valueOf(keys.next());
+         String path = forgeConfig.getString(key);
          key = key.replace(bookmarPreffix + ".", "");
-         cache.put(key, forgeConfig.getString(key));
+         cache.put(key, path);
       }
    }
 
@@ -146,7 +147,7 @@ public class BookmarkCacheImpl implements BookmarkCache
 
    /**
     * Check if Configuration is set
-    *
+    * 
     * @throws IllegalStateException when forgeConfig isn't set
     */
    public void checkInitializedCache()
