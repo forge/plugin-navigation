@@ -31,6 +31,7 @@ import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.Plugin;
+import org.kumakros.forge.plugin.navigation.bookmark.BookmarkUtils;
 import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.exception.NonExistsBookmarkException;
@@ -53,6 +54,9 @@ public class Go implements Plugin
    @Inject
    ProjectBookmarkCache projectBookmarkCache;
 
+   @Inject
+   BookmarkUtils bookmarkUtils;
+
    @DefaultCommand
    public void defaultCommand(
             @Option(required = true, completer = BookmarkAutocompleter.class, description = "Name of bookmark for go") final String mark)
@@ -65,7 +69,9 @@ public class Go implements Plugin
       {
          try
          {
-            pathProject = projectBookmarkCache.getBookmark(mark);
+            String bookmark = mark.replace(BookmarkAutocompleter.PROJECT_SUFFIX, "");
+            pathProject = projectBookmarkCache.getBookmark(bookmark);
+            pathProject = bookmarkUtils.relativePath(pathProject);
          }
          catch (NonExistsBookmarkException e)
          {
@@ -74,7 +80,8 @@ public class Go implements Plugin
       }
       try
       {
-         pathGlobal = globalBookmarkCache.getBookmark(mark);
+         String bookmark = mark.replace(BookmarkAutocompleter.GLOBAL_SUFFIX, "");
+         pathGlobal = globalBookmarkCache.getBookmark(bookmark);
       }
       catch (NonExistsBookmarkException e1)
       {

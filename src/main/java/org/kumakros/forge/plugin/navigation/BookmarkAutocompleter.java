@@ -35,8 +35,8 @@ import org.kumakros.forge.plugin.navigation.bookmark.api.BookmarkCache;
 
 public class BookmarkAutocompleter implements CommandCompleter
 {
-   public final String GLOBAL_SUFFIX = " (global)";
-   public final String PROJECT_SUFFIX = "";
+   public static final String GLOBAL_SUFFIX = "(global)";
+   public static final String PROJECT_SUFFIX = "";
 
    @Inject
    GlobalBookmarkCache globalBookmarkCache;

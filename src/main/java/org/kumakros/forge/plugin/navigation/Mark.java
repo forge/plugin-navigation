@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.jboss.forge.project.Project;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellMessages;
@@ -35,6 +36,7 @@ import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
+import org.kumakros.forge.plugin.navigation.bookmark.BookmarkUtils;
 import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.api.Bookmark;
@@ -60,6 +62,9 @@ public class Mark implements Plugin
    @Inject
    ProjectBookmarkCache projectBookmarkCache;
 
+   @Inject
+   BookmarkUtils bookmarkUtils;
+
    @DefaultCommand()
    public void defaultCommand(
             @Option(required = true, description = "Bookmark name for this resource") String mark,
@@ -73,11 +78,11 @@ public class Mark implements Plugin
             @Option(required = true, description = "Bookmark name for this resource") String mark,
             @Option(name = "global", description = "Add to global bookmarks list?", flagOnly = true, defaultValue = "false") boolean global)
    {
-      BookmarkCache bookmarkCache = getBookmarkCache(global);
-      Resource<?> currentResource = shell.getCurrentResource();
+      BookmarkCache bookmarkCache = bookmarkUtils.getBookmarkCache(global);
+      String path = bookmarkUtils.getPath(shell.getCurrentResource(), global);
       try
       {
-         bookmarkCache.addBookmark(mark, currentResource.getFullyQualifiedName());
+         bookmarkCache.addBookmark(mark, path);
       }
       catch (OverwriteBookmarkException e)
       {
@@ -85,7 +90,7 @@ public class Mark implements Plugin
                   .promptBoolean("This bookmark exists in this bookmark list, Do you want to overwrite it?");
          if (promptBoolean)
          {
-            bookmarkCache.overrideBookmark(mark, currentResource.getFullyQualifiedName());
+            bookmarkCache.overrideBookmark(mark, path);
          }
       }
    }
@@ -95,7 +100,7 @@ public class Mark implements Plugin
             @Option(required = true, description = "Bookmark name to delete") String mark,
             @Option(name = "global", description = "From global bookmark list?", flagOnly = true, defaultValue = "false") boolean global)
    {
-      BookmarkCache bookmarkCache = getBookmarkCache(global);
+      BookmarkCache bookmarkCache = bookmarkUtils.getBookmarkCache(global);
       try
       {
          bookmarkCache.delBookmark(mark);
@@ -111,7 +116,7 @@ public class Mark implements Plugin
             @Option(name = "global", description = "From global bookmark list?", flagOnly = true, defaultValue = "false") boolean global,
             final PipeOut pipeOut)
    {
-      BookmarkCache bookmarkCache = getBookmarkCache(global);
+      BookmarkCache bookmarkCache = bookmarkUtils.getBookmarkCache(global);
       List<Bookmark> listBookmarks = bookmarkCache.listBookmarks();
       for (Bookmark bm : listBookmarks)
       {
@@ -119,12 +124,4 @@ public class Mark implements Plugin
       }
    }
 
-   private BookmarkCache getBookmarkCache(boolean global)
-   {
-      if (global)
-      {
-         return globalBookmarkCache;
-      }
-      return projectBookmarkCache;
-   }
 }
