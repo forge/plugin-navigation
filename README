@@ -1,0 +1,38 @@
+This plugin makes it easy navegate between projects and directories with bookmarks in JBoss Forge Beta 5
+
+You can save your bookmarks in 2 contexts:
+
+* global: visible from any resource
+* project: bookmark saved only for this project
+
+There are 2 commands:
+* mark
+* go
+
+Mark is useful to manage bookmarks, and go is useful to move to bookmark.
+
+Possible useful script for use.
+
+$ go home
+$ go project
+$ mark javasrc
+$ cd ~/
+$ go javasrc
+takes you back to that dir
+with tab-completion of course
+$ go java<TAB>
+$ go javasrc
+
+// go without an argument lists the available targets
+$ go
+home (global)
+project
+javasrc
+
+By default, "mark" adds the bookmark to the current project's /META-INF/forge.xml
+the --global command would redirect these settings to the ~/.forge/forge.xml or ~/.forge/config file
+
+$ mark {name} --global (add by default)
+$ mark add {name} --global
+$ mark del {name} --global
+$ mark list --global
