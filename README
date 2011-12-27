@@ -1,5 +1,12 @@
-This plugin makes it easy navegate between projects and directories with bookmarks in JBoss Forge Beta 5
+This plugin makes it easy navegate between projects and directories with bookmarks in JBoss Forge 1.0.0-SNAPSHOT
 
+Installation
+============
+forge git-plugin git://github.com/ppalazon/forge-navigation.git
+
+
+Get Started
+===========
 You can save your bookmarks in 2 contexts:
 
 * global: visible from any resource
