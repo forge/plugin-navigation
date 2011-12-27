@@ -18,7 +18,7 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
+ */
 package org.kumakros.forge.plugin.navigation;
 
 import java.util.List;
@@ -35,6 +35,9 @@ import org.kumakros.forge.plugin.navigation.bookmark.api.BookmarkCache;
 
 public class BookmarkAutocompleter implements CommandCompleter
 {
+   public final String GLOBAL_SUFFIX = " (global)";
+   public final String PROJECT_SUFFIX = "";
+
    @Inject
    GlobalBookmarkCache globalBookmarkCache;
 
@@ -52,18 +55,20 @@ public class BookmarkAutocompleter implements CommandCompleter
       {
          if (shell.getCurrentProject() != null)
          {
-            updateCandidates(state.getCandidates(), projectBookmarkCache, peek, "");
+            updateCandidates(state, projectBookmarkCache, peek, PROJECT_SUFFIX);
          }
-         updateCandidates(state.getCandidates(), globalBookmarkCache, peek, " (global)");
+         updateCandidates(state, globalBookmarkCache, peek, GLOBAL_SUFFIX);
       }
    }
 
-   private void updateCandidates(List<String> candidates, BookmarkCache bookmarkCache, String peek, String suffix)
+   private void updateCandidates(CommandCompleterState state, BookmarkCache bookmarkCache, String peek,
+            String suffix)
    {
       List<Bookmark> preffixSearch = bookmarkCache.preffixSearch(peek);
       for (Bookmark marks : preffixSearch)
       {
-         candidates.add(marks.getMark() + suffix);
+         state.getCandidates().add(marks.getMark() + suffix);
+         state.setIndex(state.getOriginalIndex() - (peek == null ? 0 : peek.length()));
       }
    }
 

@@ -33,6 +33,7 @@ import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;
 import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
+import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
 import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
 import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
@@ -107,13 +108,14 @@ public class Mark implements Plugin
 
    @Command("list")
    public void list(
-            @Option(name = "global", description = "From global bookmark list?", flagOnly = true, defaultValue = "false") boolean global)
+            @Option(name = "global", description = "From global bookmark list?", flagOnly = true, defaultValue = "false") boolean global,
+            final PipeOut pipeOut)
    {
       BookmarkCache bookmarkCache = getBookmarkCache(global);
       List<Bookmark> listBookmarks = bookmarkCache.listBookmarks();
       for (Bookmark bm : listBookmarks)
       {
-         ShellMessages.info(shell, String.format("%1$s50 -> %2$s", bm.getMark(), bm.getPath()));
+         pipeOut.println(String.format("%1$-20s -> %2$s", bm.getMark(), bm.getPath()));
       }
    }
 
