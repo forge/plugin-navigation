@@ -18,30 +18,28 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
-package org.kumakros.forge.plugin.navigation.bookmark.exception;
+ */
+package org.jboss.forge.navigation.bookmark.api;
 
-public class NonExistsBookmarkException extends Exception
+import java.util.List;
+
+import org.jboss.forge.navigation.bookmark.exception.NonExistsBookmarkException;
+import org.jboss.forge.navigation.bookmark.exception.OverwriteBookmarkException;
+
+public interface BookmarkCache
 {
+   public void addBookmark(String name, String path) throws OverwriteBookmarkException;
 
-   public NonExistsBookmarkException()
-   {
-      super();
-   }
+   public void overrideBookmark(String name, String path);
 
-   public NonExistsBookmarkException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+   public void delBookmark(String name) throws NonExistsBookmarkException;
 
-   public NonExistsBookmarkException(String message)
-   {
-      super(message);
-   }
+   public String getBookmark(String name) throws NonExistsBookmarkException;
 
-   public NonExistsBookmarkException(Throwable cause)
-   {
-      super(cause);
-   }
+   public List<Bookmark> listBookmarks();
+
+   public List<Bookmark> preffixSearch(String preffix);
+
+   public void cleanAll();
 
 }

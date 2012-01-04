@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.kumakros.forge.plugin.navigation.bookmark.api;
+package org.jboss.forge.navigation.bookmark.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +29,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jboss.forge.env.Configuration;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.NonExistsBookmarkException;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.OverwriteBookmarkException;
+import org.jboss.forge.navigation.bookmark.exception.NonExistsBookmarkException;
+import org.jboss.forge.navigation.bookmark.exception.OverwriteBookmarkException;
 
 public class BookmarkCacheImpl implements BookmarkCache
 {

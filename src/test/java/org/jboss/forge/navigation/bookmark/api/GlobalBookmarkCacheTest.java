@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.kumakros.forge.plugin.navigation.bookmark.api;
+package org.jboss.forge.navigation.bookmark.api;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -29,14 +29,15 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.jboss.arquillian.api.Deployment;
+import org.jboss.forge.navigation.bookmark.GlobalBookmarkCache;
+import org.jboss.forge.navigation.bookmark.api.Bookmark;
+import org.jboss.forge.navigation.bookmark.exception.NonExistsBookmarkException;
+import org.jboss.forge.navigation.bookmark.exception.OverwriteBookmarkException;
 import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.test.AbstractShellTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
-import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.NonExistsBookmarkException;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.OverwriteBookmarkException;
 
 public class GlobalBookmarkCacheTest extends AbstractShellTest
 {

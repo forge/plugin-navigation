@@ -19,12 +19,19 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.kumakros.forge.plugin.navigation;
+package org.jboss.forge.navigation;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.jboss.forge.navigation.bookmark.BookmarkUtils;
+import org.jboss.forge.navigation.bookmark.GlobalBookmarkCache;
+import org.jboss.forge.navigation.bookmark.ProjectBookmarkCache;
+import org.jboss.forge.navigation.bookmark.api.Bookmark;
+import org.jboss.forge.navigation.bookmark.api.BookmarkCache;
+import org.jboss.forge.navigation.bookmark.exception.NonExistsBookmarkException;
+import org.jboss.forge.navigation.bookmark.exception.OverwriteBookmarkException;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.shell.Shell;
@@ -36,13 +43,6 @@ import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
-import org.kumakros.forge.plugin.navigation.bookmark.BookmarkUtils;
-import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.api.Bookmark;
-import org.kumakros.forge.plugin.navigation.bookmark.api.BookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.NonExistsBookmarkException;
-import org.kumakros.forge.plugin.navigation.bookmark.exception.OverwriteBookmarkException;
 
 /**
  *

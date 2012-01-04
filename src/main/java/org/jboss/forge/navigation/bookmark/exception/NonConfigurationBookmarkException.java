@@ -18,29 +18,30 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- */
-package org.kumakros.forge.plugin.navigation.bookmark;
+*/
+package org.jboss.forge.navigation.bookmark.exception;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.jboss.forge.env.Configuration;
-import org.jboss.forge.env.ConfigurationScope;
-import org.kumakros.forge.plugin.navigation.bookmark.api.BookmarkCacheImpl;
-
-@ApplicationScoped
-public class GlobalBookmarkCache extends BookmarkCacheImpl
+public class NonConfigurationBookmarkException extends Exception
 {
 
-   @Inject
-   Configuration configuration;
-
-   @PostConstruct
-   public void initialize()
+   public NonConfigurationBookmarkException()
    {
-      setForgeConfig(configuration.getScopedConfiguration(ConfigurationScope.USER));
-      recoveryBookmarks();
+      super();
+   }
+
+   public NonConfigurationBookmarkException(String message, Throwable cause)
+   {
+      super(message, cause);
+   }
+
+   public NonConfigurationBookmarkException(String message)
+   {
+      super(message);
+   }
+
+   public NonConfigurationBookmarkException(Throwable cause)
+   {
+      super(cause);
    }
 
 }

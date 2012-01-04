@@ -19,18 +19,19 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.kumakros.forge.plugin.navigation;
+package org.jboss.forge.navigation;
 
 import javax.inject.Inject;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.jboss.arquillian.api.Deployment;
+import org.jboss.forge.navigation.Go;
+import org.jboss.forge.navigation.bookmark.GlobalBookmarkCache;
+import org.jboss.forge.navigation.bookmark.ProjectBookmarkCache;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.test.AbstractShellTest;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
-import org.kumakros.forge.plugin.navigation.bookmark.GlobalBookmarkCache;
-import org.kumakros.forge.plugin.navigation.bookmark.ProjectBookmarkCache;
 
 import static org.junit.Assert.fail;
 

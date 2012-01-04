@@ -18,30 +18,43 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
-*/
-package org.kumakros.forge.plugin.navigation.bookmark.exception;
+ */
+package org.jboss.forge.navigation.bookmark;
 
-public class OverwriteBookmarkException extends Exception
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import org.jboss.forge.env.Configuration;
+import org.jboss.forge.env.ConfigurationScope;
+import org.jboss.forge.navigation.bookmark.api.BookmarkCacheImpl;
+import org.jboss.forge.shell.events.ProjectChanged;
+
+@ApplicationScoped
+public class ProjectBookmarkCache extends BookmarkCacheImpl
 {
 
-   public OverwriteBookmarkException()
+   @Inject
+   Configuration configuration;
+
+   @PostConstruct
+   public void initialize()
    {
-      super();
+      setForgeConfig(configuration.getScopedConfiguration(ConfigurationScope.PROJECT));
+      recoveryBookmarks();
    }
 
-   public OverwriteBookmarkException(String message, Throwable cause)
+   public void changeProject(@Observes ProjectChanged projectChanged)
    {
-      super(message, cause);
-   }
+      if (projectChanged.getNewProject() != null)
+      {
+         initialize();
+      }
+      else
+      {
+         clearBookmarks();
+      }
 
-   public OverwriteBookmarkException(String message)
-   {
-      super(message);
    }
-
-   public OverwriteBookmarkException(Throwable cause)
-   {
-      super(cause);
-   }
-
 }

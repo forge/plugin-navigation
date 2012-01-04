@@ -19,15 +19,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
-package org.kumakros.forge.plugin.navigation.bookmark;
+package org.jboss.forge.navigation.bookmark;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jboss.forge.navigation.bookmark.api.BookmarkCache;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.shell.Shell;
-import org.kumakros.forge.plugin.navigation.bookmark.api.BookmarkCache;
 
 @Singleton
 public class BookmarkUtils
